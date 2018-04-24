@@ -8,8 +8,8 @@ import argparse
 def create_dataset_lists(args):
 
     # read args from main (input and output)
-    dataset_path = args.input
-    output_root = args.output
+    dataset_path = args.i
+    output_root = args.o
 
     # read all sequence directories (starting with a number)
     dirs = sorted(glob.glob(join(dataset_path, "0*")))
@@ -68,6 +68,5 @@ if __name__ == "__main__":
     parser.add_argument('-i', '-input', type=str, required=True, help="Directory wich contains the unzipped dataset.")
     parser.add_argument('-o','-output', type=str, required=True, help="Ouptut directory")
     args = parser.parse_args()
-
     create_dataset_lists(args)
 

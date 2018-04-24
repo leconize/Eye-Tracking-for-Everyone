@@ -37,14 +37,14 @@ def train(args):
 
     #todo: manage parameters in main
     if args.data == "big":
-        dataset_path = "/cvgl/group/GazeCapture/gazecapture"
+        dataset_path = "E:/ftp"
     if args.data == "small":
-        dataset_path = "/cvgl/group/GazeCapture/eye_tracker_train_and_val.npz"
+        dataset_path = "c:/Users/HP_PC01/Downloads/eye_tracker_train_and_val.npz"
 
     if args.data == "big":
-        train_path = "/cvgl/group/GazeCapture/train"
-        val_path = "/cvgl/group/GazeCapture/validation"
-        test_path = "/cvgl/group/GazeCapture/test"
+        train_path = "E:/datasets/train"
+        val_path = "E:/datasets/validation"
+        test_path = "E:/datasets/test"
 
     print("{} dataset: {}".format(args.data, dataset_path))
 
@@ -113,7 +113,7 @@ def train(args):
             validation_data=generator_val_data(val_names, dataset_path, batch_size, img_ch, img_cols, img_rows),
             validation_steps=(len(val_names)) / batch_size,
             callbacks=[EarlyStopping(patience=patience),
-                       ModelCheckpoint("weights_big/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
+                       ModelCheckpoint("./weights_big/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
                        ]
         )
     if args.data == "small":
@@ -125,6 +125,6 @@ def train(args):
             validation_data=generator_npz(val_data, batch_size, img_ch, img_cols, img_rows),
             validation_steps=(val_data[0].shape[0])/batch_size,
             callbacks=[EarlyStopping(patience=patience),
-                       ModelCheckpoint("weights/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
+                       ModelCheckpoint("./weights/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
                        ]
         )

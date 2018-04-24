@@ -6,6 +6,21 @@ from os.path import join
 import json
 from data_utility import image_normalization
 
+def load_custom_my_npz():
+    train_npzfile = np.load('./train.npz')
+    val_npzfile = np.load('./val.npz')
+    train_face = train_npzfile['face']
+    train_left = train_npzfile['left']
+    train_right = train_npzfile['right']
+    train_grid = train_npzfile['facegrid']
+    train_y = train_npzfile['y']
+    val_face = val_npzfile['face']
+    val_left = val_npzfile['left']
+    val_right = val_npzfile['right']
+    val_grid = val_npzfile['facegrid']
+    val_y = val_npzfile['y']
+    
+    return [train_left, train_right, train_face, train_grid, train_y], [val_left, val_right, val_face, val_grid, val_y]
 
 # load data directly from the npz file (small dataset, 48k and 5k for train and test)
 def load_data_from_npz(file):
@@ -39,6 +54,7 @@ def load_batch(data, img_ch, img_cols, img_rows):
         if not os.path.exists(img_dir):
             os.makedir(img_dir)
 
+
     # create batch structures
     left_eye_batch = np.zeros(shape=(data[0].shape[0], img_ch, img_cols, img_rows), dtype=np.float32)
     right_eye_batch = np.zeros(shape=(data[0].shape[0], img_ch, img_cols, img_rows), dtype=np.float32)
@@ -48,6 +64,7 @@ def load_batch(data, img_ch, img_cols, img_rows):
 
     # load left eye
     for i, img in enumerate(data[0]):
+        print(img.shape)
         img = cv2.resize(img, (img_cols, img_rows))
         if save_images:
             cv2.imwrite(join(img_dir, "left" + str(i) + ".png"), img)
@@ -88,9 +105,8 @@ def load_data_names(path):
 
     seq_list = []
     seqs = sorted(glob.glob(join(path, "0*")))
-
     for seq in seqs:
-
+        
         file = open(seq, "r")
         content = file.read().splitlines()
         for line in content:
@@ -144,11 +160,11 @@ def load_batch_from_names(names, path, img_ch, img_cols, img_rows):
         #     print("Error opening image: {}".format(join(path, dir, "frames", frame)))
         #     continue
         #
-        # if int(face_json["X"][idx]) < 0 or int(face_json["Y"][idx]) < 0 or \
-        #     int(left_json["X"][idx]) < 0 or int(left_json["Y"][idx]) < 0 or \
-        #     int(right_json["X"][idx]) < 0 or int(right_json["Y"][idx]) < 0:
-        #     print("Error with coordinates: {}".format(join(path, dir, "frames", frame)))
-        #     continue
+        if int(face_json["X"][idx]) < 0 or int(face_json["Y"][idx]) < 0 or \
+            int(left_json["X"][idx]) < 0 or int(left_json["Y"][idx]) < 0 or \
+            int(right_json["X"][idx]) < 0 or int(right_json["Y"][idx]) < 0:
+            # print("Error with coordinates: {}".format(join(path, dir, "frames", frame)))
+            continue
 
         # get face
         tl_x_face = int(face_json["X"][idx])

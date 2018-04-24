@@ -13,6 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('-batch_size', type=int, default=128, help='batch size (default 50)')
     parser.add_argument('-patience', type=int, default=15, help='early stopping patience (default 10)')
     parser.add_argument('-dev', type=str, default="-1", help='what cpu or gpu (recommended) use to train the model')
+    parser.add_argument('-mode', type=str, default="all", help="mode of the dataset(test, train val)")
     args = parser.parse_args()
 
     # train

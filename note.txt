@@ -1,0 +1,12 @@
+MAE: 0.9091028571128845 1.0299582481384277 (5000 samples)
+STD: 1.1094682216644287 1.2605665922164917 (5000 samples)
+result in result.csv
+
+python .\main.py -test -data="big" -dev=0 ; python .\main.py -test -data="big" -dev=0 mode="train" ; python .\main.py -test -data="big" -dev=0 mode="test" ; python .\main.py -test -data="big" -dev=0 mode="validation"
+
+
+
+(883, 3, 64, 64)
+(883, 3, 64, 64)
+(883, 3, 64, 64)
+(883, 1, 25, 25)
