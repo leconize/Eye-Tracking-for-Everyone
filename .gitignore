@@ -1,0 +1,8 @@
+*.npy
+/weights
+/weights_big
+*.csv
+/report
+/data
+/pythonScript
+*.npz
