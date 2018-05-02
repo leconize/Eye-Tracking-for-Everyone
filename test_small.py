@@ -1,11 +1,11 @@
 import os
 
-from load_data import load_data_from_npz, load_batch, load_custom_my_npz
+from load_data import load_data_from_npz, load_batch, load_custom_my_npz, load_custom_test_npz
 from models import get_eye_tracker_model
 import numpy as np
 import logging
 
-logging.basicConfig(filename="result_big.csv", level=logging.DEBUG, format="%(message)s", filemode="w")
+logging.basicConfig(filename="result_small_with_mydata.csv", level=logging.DEBUG, format="%(message)s", filemode="w")
 
 def test_small(args):
 
@@ -16,7 +16,8 @@ def test_small(args):
     print("Dataset: {}".format(dataset_path))
 
     # weights_path = "c:\Users\HP_PC01\Desktop\Eye-Tracking-for-Everyone\weights"
-    weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
+    # weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
+    weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\\weights.067-2.35362.hdf5"
     print("Weights: {}".format(weights_path))
 
     # image parameter
@@ -39,12 +40,12 @@ def test_small(args):
 
     # data
     # train_data, val_data = load_data_from_npz(dataset_path)
-    train_data, val_data = load_custom_my_npz()
-
+    # train_data, val_data = load_custom_my_npz()
+    train_data = load_custom_test_npz()
     print("Loading testing data...")
     # x, y = load_batch([l[:] for l in val_data], img_ch, img_cols, img_rows)
     print("Done.")
-    
+    print(len(train_data))
     x = train_data[:4]
     y = train_data[4]
  
