@@ -7,3 +7,4 @@
 /pythonScript
 *.npz
 *.pickle
+*.pyc

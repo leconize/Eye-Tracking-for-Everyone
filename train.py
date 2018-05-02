@@ -66,8 +66,8 @@ def train(args):
 
     # weights
     # print("Loading weights...",  end='')
-    # weights_path = "weights/weights.003-4.05525.hdf5"
-    # model.load_weights(weights_path)
+    weights_path = "weights_big/weights.000-3.88990.hdf5"
+    model.load_weights(weights_path)
     # print("Done.")
 
     # optimizer
@@ -113,7 +113,7 @@ def train(args):
             validation_data=generator_val_data(val_names, dataset_path, batch_size, img_ch, img_cols, img_rows),
             validation_steps=(len(val_names)) / batch_size,
             callbacks=[EarlyStopping(patience=patience),
-                       ModelCheckpoint("./weights_big/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
+                       ModelCheckpoint("./weights_big/weights.2{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=False)
                        ]
         )
     if args.data == "small":

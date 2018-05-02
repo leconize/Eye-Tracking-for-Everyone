@@ -113,7 +113,7 @@ def extract_img_to_features(image_path, json_files):
         screen_x, screen_y = json_files[0]['x'][index], json_files[0]['y'][index]
     
     point_x, point_y = convertScreenToCam(
-        screen_x, screen_y, "iPhone 6", 1, 375, 667, False)
+        screen_x, screen_y, "iPhone 7", 1, 375, 667, False)
     return (face, left, right, facegrid, point_x, point_y)
 
 
@@ -138,7 +138,7 @@ def create_custom_name_list(basepath):
             name_list.extend(map(lambda x: join(directory, str(x)+".jpg"), valid))
     return name_list
 
-def create_dataset(basepath):
+def create_dataset(basepath, savefile):
     filenames = create_custom_name_list(basepath)
     
     # current_path = dirname(filename)
@@ -253,11 +253,12 @@ def create_dataset(basepath):
         y_batch[index][1] = y_y
         
     # save_file = open('./mynpz.npz', 'w')
-    train_face, test_face, train_left, test_left, train_right, test_right, train_grid, test_grid, train_y, test_y= train_test_split(face_batch, left_eye_batch, right_eye_batch, face_grid_batch, y_batch, test_size=0.2)
-    np.savez('./test.npz', face=test_face, left=test_left, right=test_right, facegrid=test_grid, y=test_y)
-    train_face, val_face, train_left, val_left, train_right, val_right, train_grid,val_grid, train_y, val_y = train_test_split(train_face, train_left, train_right, train_grid, train_y, test_size=0.15)
-    np.savez('./val.npz', face=val_face, left=val_left, right=val_right, facegrid=val_grid, y=val_y)
-    np.savez('./train.npz', face=train_face, left=train_left, right=train_right, facegrid=train_grid, y=train_y)
+    # train_face, test_face, train_left, test_left, train_right, test_right, train_grid, test_grid, train_y, test_y= train_test_split(face_batch, left_eye_batch, right_eye_batch, face_grid_batch, y_batch, test_size=0.2)
+    # np.savez('./test.npz', face=test_face, left=test_left, right=test_right, facegrid=test_grid, y=test_y)
+    # train_face, val_face, train_left, val_left, train_right, val_right, train_grid,val_grid, train_y, val_y = train_test_split(train_face, train_left, train_right, train_grid, train_y, test_size=0.15)
+    # np.savez('./val.npz', face=val_face, left=val_left, right=val_right, facegrid=val_grid, y=val_y)
+    # np.savez('./train.npz', face=train_face, left=train_left, right=train_right, facegrid=train_grid, y=train_y)
+    np.savez('./{}.npz'.format(savefile), face=face_batch, left=left_eye_batch, right=right_eye_batch, facegrid=face_grid_batch, y=y_batch)
     
 def load_data(basepath):
 
@@ -405,6 +406,8 @@ def main():
 
 
 if __name__ == "__main__":
-    create_dataset('E:\mydataset')
+    create_dataset('E:\\test', "test")
+    create_dataset('E:\\val', "val")
+    create_dataset('E:\\train', "train")
     # data = np.load("c:/Users/HP_PC01/Downloads/eye_tracker_train_and_val.npz")
     # print(data)

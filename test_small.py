@@ -5,7 +5,7 @@ from models import get_eye_tracker_model
 import numpy as np
 import logging
 
-logging.basicConfig(filename="result.csv", level=logging.DEBUG, format="%(message)s", filemode="w")
+logging.basicConfig(filename="result_big.csv", level=logging.DEBUG, format="%(message)s", filemode="w")
 
 def test_small(args):
 
@@ -16,7 +16,7 @@ def test_small(args):
     print("Dataset: {}".format(dataset_path))
 
     # weights_path = "c:\Users\HP_PC01\Desktop\Eye-Tracking-for-Everyone\weights"
-    weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights/weights.067-2.35362.hdf5"
+    weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
     print("Weights: {}".format(weights_path))
 
     # image parameter
@@ -47,8 +47,7 @@ def test_small(args):
     
     x = train_data[:4]
     y = train_data[4]
-    len(len(y[0]))
-    return
+ 
     predictions = model.predict(x=x, batch_size=batch_size, verbose=1)
     
     # print and analyze predictions

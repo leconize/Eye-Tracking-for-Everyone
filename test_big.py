@@ -25,7 +25,7 @@ def test_big(args):
     dataset_path = "E:/ftp"
     print("Dataset: {}".format(names_path))
 
-    weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights/weights.067-2.35362.hdf5"
+    weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
     print("Weights: {}".format(weights_path))
 
     # image parameter
@@ -57,7 +57,7 @@ def test_big(args):
     err_x = []
     err_y = []
 
-    # reportfile = open("./report/{}.txt".format(args.mode), "w")
+    reportfile = open("./report/{}1.txt".format(args.mode), "w")
         
 
     print("Loading testing data...")
@@ -74,7 +74,7 @@ def test_big(args):
 
             err_x.append(abs(prediction[0] - y[i][0]))
             err_y.append(abs(prediction[1] - y[i][1]))
-            # reportfile.write("{}, {}, {}, {}\n".format(prediction[0], prediction[1], y[i][0], y[i][1]))
+            reportfile.write("{}, {}, {}, {}\n".format(prediction[0], prediction[1], y[i][0], y[i][1]))
 
     # mean absolute error
     mae_x = np.mean(err_x)
@@ -87,8 +87,8 @@ def test_big(args):
     # final results
     print("MAE: {} {} ( samples)".format(mae_x, mae_y))
     print("STD: {} {} ( samples)".format(std_x, std_y))
-    # reportfile.write("MAE: {} {} ( samples)".format(mae_x, mae_y))
-    # reportfile.write("STD: {} {} ( samples)".format(std_x, std_y))
+    reportfile.write("MAE: {} {} ( samples)".format(mae_x, mae_y))
+    reportfile.write("STD: {} {} ( samples)".format(std_x, std_y))
 
 
 if __name__ == '__main__':

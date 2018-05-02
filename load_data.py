@@ -22,6 +22,18 @@ def load_custom_my_npz():
     
     return [train_left, train_right, train_face, train_grid, train_y], [val_left, val_right, val_face, val_grid, val_y]
 
+
+def load_custom_test_npz():
+    train_npzfile = np.load('./test.npz')
+    train_face = train_npzfile['face']
+    train_left = train_npzfile['left']
+    train_right = train_npzfile['right']
+    train_grid = train_npzfile['facegrid']
+    train_y = train_npzfile['y']
+
+    
+    return [train_left, train_right, train_face, train_grid, train_y]
+
 # load data directly from the npz file (small dataset, 48k and 5k for train and test)
 def load_data_from_npz(file):
 
