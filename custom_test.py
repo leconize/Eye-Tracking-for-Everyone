@@ -149,6 +149,7 @@ def create_dataset(basepath):
     img_ch = 3
     img_cols = 64
     img_rows = 64
+    enumerate
 
     left_eye_batch = np.zeros(shape=(total_file, img_ch, img_cols, img_rows), dtype=np.float32)
     right_eye_batch = np.zeros(shape=(total_file, img_ch, img_cols, img_rows), dtype=np.float32)
