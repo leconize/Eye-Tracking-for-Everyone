@@ -156,9 +156,11 @@ def create_dataset(basepath, savefile):
     face_grid_batch = np.zeros(shape=(total_file, 1, 25, 25), dtype=np.float32)
     y_batch = np.zeros((total_file, 2), dtype=np.float32)
     
-    print(filenames)
+    dic = {}
+    count = 0
     for i in filenames:
         current_dir = dirname(i)
+        # print(current_dir)
         face_info = json.load(open(join(current_dir, "faceInfo.json")))
         left_info = json.load(open(join(current_dir, "leftEye.json")))
         right_info = json.load(open(join(current_dir, "rightEye.json")))
@@ -166,9 +168,9 @@ def create_dataset(basepath, savefile):
 
         img = cv2.imread(i)
         height, width, channels = img.shape
-        print(i)
+        #print(i)
         index = int(i.split('\\')[-1][:-4])
-        print(index)
+        #print(index)
         parent_folder_name = dirname(i)
         parent_folder_id = -1
         if parent_folder_name == 'random':
@@ -245,12 +247,13 @@ def create_dataset(basepath, savefile):
         right_eye = right_eye.astype('float32')
 
         # add to the related batch
-        left_eye_batch[index] = left_eye
-        right_eye_batch[index] = right_eye
-        face_batch[index] = face
-        face_grid_batch[index] = face_grid
-        y_batch[index][0] = y_x
-        y_batch[index][1] = y_y
+        left_eye_batch[count] = left_eye
+        right_eye_batch[count] = right_eye
+        face_batch[count] = face
+        face_grid_batch[count] = face_grid
+        y_batch[count][0] = y_x
+        y_batch[count][1] = y_y
+        count += 1
         
     # save_file = open('./mynpz.npz', 'w')
     # train_face, test_face, train_left, test_left, train_right, test_right, train_grid, test_grid, train_y, test_y= train_test_split(face_batch, left_eye_batch, right_eye_batch, face_grid_batch, y_batch, test_size=0.2)
@@ -258,8 +261,9 @@ def create_dataset(basepath, savefile):
     # train_face, val_face, train_left, val_left, train_right, val_right, train_grid,val_grid, train_y, val_y = train_test_split(train_face, train_left, train_right, train_grid, train_y, test_size=0.15)
     # np.savez('./val.npz', face=val_face, left=val_left, right=val_right, facegrid=val_grid, y=val_y)
     # np.savez('./train.npz', face=train_face, left=train_left, right=train_right, facegrid=train_grid, y=train_y)
+
     np.savez('./{}.npz'.format(savefile), face=face_batch, left=left_eye_batch, right=right_eye_batch, facegrid=face_grid_batch, y=y_batch)
-    
+    print("{}.npz".format(savefile))
 def load_data(basepath):
 
     # useful for debug

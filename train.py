@@ -1,7 +1,7 @@
 import os
 from keras.optimizers import SGD, Adam
 from keras.callbacks import  EarlyStopping, ModelCheckpoint
-from load_data import load_data_from_npz, load_batch, load_data_names, load_batch_from_names_random
+from load_data import load_data_from_npz, load_batch, load_data_names, load_batch_from_names_random, load_custom_batch, load_custom_my_npz
 from models import get_eye_tracker_model
 
 
@@ -10,10 +10,14 @@ def generator_npz(data, batch_size, img_ch, img_cols, img_rows):
 
     while True:
         for it in list(range(0, data[0].shape[0], batch_size)):
-            x, y = load_batch([l[it:it + batch_size] for l in data], img_ch, img_cols, img_rows)
+            x, y = load_custom_batch([l[it:it + batch_size] for l in data], img_ch, img_cols, img_rows)
             yield x, y
 
+def generator_test(data, batch_size):
 
+    while True:
+        for it in list(range(0, data[0].shape[0], batch_size)):
+            x, y = load
 # generator with random batch load (train)
 def generator_train_data(names, path, batch_size, img_ch, img_cols, img_rows):
 
@@ -66,7 +70,8 @@ def train(args):
 
     # weights
     # print("Loading weights...",  end='')
-    weights_path = "weights_big/weights.000-3.88990.hdf5"
+    # weights_path = "weights_big/weights.2001-3.81182.hdf5"
+    weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\\weights.067-2.35362.hdf5"
     model.load_weights(weights_path)
     # print("Done.")
 
@@ -88,7 +93,8 @@ def train(args):
         test_names = load_data_names(test_path)
 
     if args.data == "small":
-        train_data, val_data = load_data_from_npz(dataset_path)
+        # train_data, val_data = load_data_from_npz(dataset_path)
+        train_data, val_data = load_custom_my_npz()
 
     # debug
     # x, y = load_batch([l[0:batch_size] for l in train_data], img_ch, img_cols, img_rows)
@@ -125,6 +131,7 @@ def train(args):
             validation_data=generator_npz(val_data, batch_size, img_ch, img_cols, img_rows),
             validation_steps=(val_data[0].shape[0])/batch_size,
             callbacks=[EarlyStopping(patience=patience),
-                       ModelCheckpoint("./weights/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
+                    #    ModelCheckpoint("./weights/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
+                    ModelCheckpoint("./w_finetunes_small/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
                        ]
         )

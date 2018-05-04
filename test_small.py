@@ -5,9 +5,12 @@ from models import get_eye_tracker_model
 import numpy as np
 import logging
 
-logging.basicConfig(filename="result_small_with_mydata.csv", level=logging.DEBUG, format="%(message)s", filemode="w")
+
 
 def test_small(args):
+
+
+    logging.basicConfig(filename="result_small_with_mydata.csv", level=logging.DEBUG, format="%(message)s", filemode="w")
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = args.dev
@@ -15,9 +18,12 @@ def test_small(args):
     dataset_path = "c:/Users/HP_PC01/Downloads/eye_tracker_train_and_val.npz"
     print("Dataset: {}".format(dataset_path))
 
+    if args.weight_path != None:
+        weights_path = args.weight_path
+    else:
     # weights_path = "c:\Users\HP_PC01\Desktop\Eye-Tracking-for-Everyone\weights"
     # weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
-    weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\\weights.067-2.35362.hdf5"
+        weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\\weights.067-2.35362.hdf5"
     print("Weights: {}".format(weights_path))
 
     # image parameter
@@ -48,16 +54,19 @@ def test_small(args):
     print(len(train_data))
     x = train_data[:4]
     y = train_data[4]
- 
+    from collections import Counter
+    a, count = np.unique(y, axis=0, return_counts=True)
+    print(a)
+    print(count)
     predictions = model.predict(x=x, batch_size=batch_size, verbose=1)
-    
+    print(y.shape)
     # print and analyze predictions
     err_x = []
     err_y = []
     for i, prediction in enumerate(predictions):
-        print("PR: {} {}".format(prediction[0], prediction[1]))
-        print("GT: {} {} \n".format(y[i][0], y[i][1]))
-
+        #print("PR: {} {}".format(prediction[0], prediction[1]))
+        #print("GT: {} {} \n".format(y[i][0], y[i][1]))
+        # print(i)
         logging.info("{},{},{},{}".format(prediction[0], prediction[1], y[i][0], y[i][1]))
 
         err_x.append(abs(prediction[0] - y[i][0]))

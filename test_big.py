@@ -1,5 +1,5 @@
 import os
-from load_data import load_data_names, load_batch_from_names, load_batch_from_names_random, load_batch
+from load_data import load_data_names, load_batch_from_names, load_batch_from_names_random, load_batch, load_phone_label_from_names
 from models import get_eye_tracker_model
 import numpy as np
 from custom_test import load_data
@@ -25,7 +25,10 @@ def test_big(args):
     dataset_path = "E:/ftp"
     print("Dataset: {}".format(names_path))
 
-    weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
+    if args.weight == "big":
+        weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
+    else:
+        weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\weights.067-2.35362.hdf5"
     print("Weights: {}".format(weights_path))
 
     # image parameter
@@ -49,7 +52,7 @@ def test_big(args):
 
     # data
     test_names = load_data_names(names_path)
-
+    
     # limit amount of testing data
     # test_names = test_names[:1000]
 
@@ -57,8 +60,9 @@ def test_big(args):
     err_x = []
     err_y = []
 
-    reportfile = open("./report/{}1.txt".format(args.mode), "w")
-        
+    # reportfile = open("./report/{}1.txt".format(args.mode), "w")
+    iphone_report = open("./report/iphone{}.txt".format(args.weight), "w")
+    ipad_report = open("./report/ipad{}.txt".format(args.weight), "w")
 
     print("Loading testing data...")
     for it in list(range(0, len(test_names), chunk_size)):
@@ -66,7 +70,7 @@ def test_big(args):
         x, y = load_batch_from_names(test_names[it:it + chunk_size],  dataset_path, img_ch, img_cols, img_rows)
         # x, y = load_batch_from_names(test_names[it:it + chunk_size], dataset_path, img_ch, img_cols, img_rows)
         predictions = model.predict(x=x, batch_size=batch_size, verbose=1)
-
+        phone_model_infos = load_phone_label_from_names(test_names[it:it + chunk_size], dataset_path)
         # print and analyze predictions
         for i, prediction in enumerate(predictions):
             print("PR: {} {}".format(prediction[0], prediction[1]))
@@ -74,7 +78,12 @@ def test_big(args):
 
             err_x.append(abs(prediction[0] - y[i][0]))
             err_y.append(abs(prediction[1] - y[i][1]))
-            reportfile.write("{}, {}, {}, {}\n".format(prediction[0], prediction[1], y[i][0], y[i][1]))
+            print(phone_model_infos[i])
+            if "iPhone" in phone_model_infos[i]:
+                iphone_report.write("{}, {}, {}, {}\n".format(prediction[0], prediction[1], y[i][0], y[i][1]))
+            else:
+                ipad_report.write("{}, {}, {}, {}\n".format(prediction[0], prediction[1], y[i][0], y[i][1]))
+            # reportfile.write("{}, {}, {}, {}\n".format(prediction[0], prediction[1], y[i][0], y[i][1]))
 
     # mean absolute error
     mae_x = np.mean(err_x)
@@ -87,8 +96,8 @@ def test_big(args):
     # final results
     print("MAE: {} {} ( samples)".format(mae_x, mae_y))
     print("STD: {} {} ( samples)".format(std_x, std_y))
-    reportfile.write("MAE: {} {} ( samples)".format(mae_x, mae_y))
-    reportfile.write("STD: {} {} ( samples)".format(std_x, std_y))
+    # reportfile.write("MAE: {} {} ( samples)".format(mae_x, mae_y))
+    # reportfile.write("STD: {} {} ( samples)".format(std_x, std_y))
 
 
 if __name__ == '__main__':

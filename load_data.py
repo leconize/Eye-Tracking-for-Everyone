@@ -23,6 +23,7 @@ def load_custom_my_npz():
     return [train_left, train_right, train_face, train_grid, train_y], [val_left, val_right, val_face, val_grid, val_y]
 
 
+
 def load_custom_test_npz():
     train_npzfile = np.load('./test.npz')
     train_face = train_npzfile['face']
@@ -33,6 +34,27 @@ def load_custom_test_npz():
 
     
     return [train_left, train_right, train_face, train_grid, train_y]
+
+def load_phone_label_from_names(names, path):
+
+    lis = []
+    for i, img_name in enumerate(names):
+
+        # directory
+        dir = img_name[:5]
+
+        # frame name
+        frame = img_name[6:]
+
+        # index of the frame inside the sequence
+        idx = int(frame[:-4])
+
+        info_file = open(join(path, dir, "info.json"))
+
+        info_file = json.load(info_file)
+
+        lis.append(info_file['DeviceName'])
+    return lis
 
 # load data directly from the npz file (small dataset, 48k and 5k for train and test)
 def load_data_from_npz(file):
@@ -52,6 +74,47 @@ def load_data_from_npz(file):
     print("Done.")
 
     return [train_eye_left, train_eye_right, train_face, train_face_mask, train_y], [val_eye_left, val_eye_right, val_face, val_face_mask, val_y]
+
+def load_custom_batch(data, img_ch, img_cols, img_rows):
+
+    # useful for debug
+    save_images = False
+
+    # if save images, create the related directory
+    img_dir = "images"
+    if save_images:
+        if not os.path.exists(img_dir):
+            os.makedir(img_dir)
+
+
+    # create batch structures
+    left_eye_batch = np.zeros(shape=(data[0].shape[0], img_ch, img_cols, img_rows), dtype=np.float32)
+    right_eye_batch = np.zeros(shape=(data[0].shape[0], img_ch, img_cols, img_rows), dtype=np.float32)
+    face_batch = np.zeros(shape=(data[0].shape[0], img_ch, img_cols, img_rows), dtype=np.float32)
+    face_grid_batch = np.zeros(shape=(data[0].shape[0], 1, 25, 25), dtype=np.float32)
+    y_batch = np.zeros((data[0].shape[0], 2), dtype=np.float32)
+
+    # load left eye
+    for i, img in enumerate(data[0]):
+        left_eye_batch[i] = img
+
+    # load right eye
+    for i, img in enumerate(data[1]):
+        right_eye_batch[i] = img
+    # load faces
+    for i, img in enumerate(data[2]):
+        face_batch[i] = img
+
+    # load grid faces
+    for i, img in enumerate(data[3]):
+        face_grid_batch[i] = img
+
+    # load labels
+    for i, labels in enumerate(data[4]):
+        y_batch[i] = labels
+
+    return [right_eye_batch, left_eye_batch, face_batch, face_grid_batch], y_batch
+
 
 
 # load a batch with data loaded from the npz file
