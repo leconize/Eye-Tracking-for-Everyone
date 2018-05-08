@@ -70,9 +70,13 @@ def train(args):
 
     # weights
     # print("Loading weights...",  end='')
-    # weights_path = "weights_big/weights.2001-3.81182.hdf5"
-    weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\\weights.067-2.35362.hdf5"
-    model.load_weights(weights_path)
+    if args.weight_path != None:
+        weights_path = args.weight_path
+        print("use path {}".format(args.weight_path))
+    else:
+        #weights_path = "weights_big/weights.2001-3.81182.hdf5"
+        weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\\weights.067-2.35362.hdf5"
+    #model.load_weights(weights_path)
     # print("Done.")
 
     # optimizer
@@ -130,8 +134,8 @@ def train(args):
             verbose=1,
             validation_data=generator_npz(val_data, batch_size, img_ch, img_cols, img_rows),
             validation_steps=(val_data[0].shape[0])/batch_size,
-            callbacks=[EarlyStopping(patience=patience),
+            callbacks=[EarlyStopping(patience=15),
                     #    ModelCheckpoint("./weights/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
-                    ModelCheckpoint("./w_finetunes_small/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
+                    ModelCheckpoint("./small/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)
                        ]
         )

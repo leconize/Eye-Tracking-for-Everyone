@@ -8,3 +8,4 @@
 *.npz
 *.pickle
 *.pyc
+*.hdf5

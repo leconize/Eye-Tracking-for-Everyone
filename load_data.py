@@ -113,6 +113,7 @@ def load_custom_batch(data, img_ch, img_cols, img_rows):
     for i, labels in enumerate(data[4]):
         y_batch[i] = labels
 
+    #print(len(left_eye_batch))
     return [right_eye_batch, left_eye_batch, face_batch, face_grid_batch], y_batch
 
 

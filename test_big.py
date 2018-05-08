@@ -2,7 +2,7 @@ import os
 from load_data import load_data_names, load_batch_from_names, load_batch_from_names_random, load_batch, load_phone_label_from_names
 from models import get_eye_tracker_model
 import numpy as np
-from custom_test import load_data
+from something import load_data
 
 
 def generator(data, batch_size, img_ch, img_cols, img_rows):
