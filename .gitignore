@@ -10,6 +10,7 @@
 *.pyc
 *.hdf5
 *.jpg
+/.vscode
 /notebook
 *.txt
 .DS_Store

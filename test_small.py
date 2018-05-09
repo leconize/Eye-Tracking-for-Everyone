@@ -22,8 +22,8 @@ def test_small(args):
         weights_path = args.weight_path
     else:
     # weights_path = "c:\Users\HP_PC01\Desktop\Eye-Tracking-for-Everyone\weights"
-        #weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
-        weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\\weights.067-2.35362.hdf5"
+        weights_path = "c:/Users/HP_PC01/Desktop/Eye-Tracking-for-Everyone/weights_big/weights.2001-3.81182.hdf5"
+        #weights_path = "C:\\Users\\HP_PC01\\Desktop\\Eye-Tracking-for-Everyone\\weights\\weights.067-2.35362.hdf5"
     print("Weights: {}".format(weights_path))
 
     # image parameter
@@ -68,7 +68,7 @@ def test_small(args):
 
         err_x.append(abs(prediction[0] - y[i][0]))
         err_y.append(abs(prediction[1] - y[i][1]))
-        dis.append(distance(prediction, y[i]))
+        dis.append(distance(prediction, y[i])- 0.23374233072)
 
     # mean absolute error
     mae_x = np.mean(err_x)
@@ -84,7 +84,7 @@ def test_small(args):
 
     # final results
     print("MAE: |{:5f} {:5f}| ({} samples)".format(mae_x, mae_y, len(y)))
-    print("STD: |{:5f} {:5f}| ({:5f} samples)".format(std_x, std_y, len(y)))
+    print("STD: |{:5f} {:5f}| ({} samples)".format(std_x, std_y, len(y)))
     print("MSE: |{:5f}|".format(mse))
     print(mean_absolute_error(y, predictions, multioutput="raw_values"))
     print(len(dis))
