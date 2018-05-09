@@ -8,10 +8,6 @@ import logging
 
 
 def test_small(args):
-
-
-    logging.basicConfig(filename="result_small_with_mydata.csv", level=logging.DEBUG, format="%(message)s", filemode="w")
-
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = args.dev
 
@@ -47,7 +43,10 @@ def test_small(args):
     # data
     # train_data, val_data = load_data_from_npz(dataset_path)
     # train_data, val_data = load_custom_my_npz()
-    train_data = load_custom_test_npz()
+    data_file_name = ""
+    logging.basicConfig(filename="result_{}.csv".format(data_file_name), level=logging.DEBUG, format="%(message)s", filemode="w")
+    logging.info("Weight path = {}".format(weights_path))
+    train_data = load_custom_test_npz(data_file_name)
     print("Loading testing data...")
     # x, y = load_batch([l[:] for l in val_data], img_ch, img_cols, img_rows)
     print("Done.")
@@ -78,17 +77,19 @@ def test_small(args):
     std_x = np.std(err_x)
     std_y = np.std(err_y)
 
-    from sklearn.metrics import mean_squared_error, mean_absolute_error
-    from sklearn.metrics.pairwise import euclidean_distances
+    from sklearn.metrics import mean_squared_error
     mse = mean_squared_error(y, predictions)
 
     # final results
     print("MAE: |{:5f} {:5f}| ({} samples)".format(mae_x, mae_y, len(y)))
     print("STD: |{:5f} {:5f}| ({} samples)".format(std_x, std_y, len(y)))
     print("MSE: |{:5f}|".format(mse))
-    print(mean_absolute_error(y, predictions, multioutput="raw_values"))
-    print(len(dis))
     print("Mean Distance |{:5f}|".format(np.mean(dis)))
+
+    logging.info("MAE: |{:5f} {:5f}| ({} samples)".format(mae_x, mae_y, len(y)))
+    logging.info("STD: |{:5f} {:5f}| ({} samples)".format(std_x, std_y, len(y)))
+    logging.info("MSE: |{:5f}|".format(mse))
+    logging.info("Mean Distance |{:5f}|".format(np.mean(dis)))
 
 def distance(x, y):
     return np.sqrt( np.power(x[0]-y[0], 2) + np.power(x[1]-y[1], 2))

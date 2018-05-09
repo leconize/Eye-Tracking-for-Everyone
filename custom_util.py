@@ -97,7 +97,6 @@ def create_custom_name_list(basepath):
     name_list = []
     for folder in folders:
         for data_type in types:
-            current_path = join(basepath, folder)
             directory = join(basepath, folder, data_type)
             list_imgs = listdir(directory)
             list_imgs = filter(lambda x: x not in exclude_list, list_imgs)

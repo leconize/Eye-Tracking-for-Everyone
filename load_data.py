@@ -24,8 +24,8 @@ def load_custom_my_npz():
 
 
 
-def load_custom_test_npz():
-    train_npzfile = np.load('./ntest.npz')
+def load_custom_test_npz(filename):
+    train_npzfile = np.load(filename)
     train_face = train_npzfile['face']
     train_left = train_npzfile['left']
     train_right = train_npzfile['right']
