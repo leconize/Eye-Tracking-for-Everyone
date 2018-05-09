@@ -9,3 +9,7 @@
 *.pickle
 *.pyc
 *.hdf5
+*.jpg
+/notebook
+*.txt
+.DS_Store
